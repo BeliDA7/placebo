@@ -1,0 +1,90 @@
+@import "tailwindcss";
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: thin;
+}
+
+body {
+  transition: background-color 0.2s, color 0.2s;
+}
+
+/* === НОВЫЙ РЕЖИМ ВЫСОКОГО КОНТРАСТА (WCAG) === */
+/* Чёрный текст на белом фоне, убираем полагание на цвет */
+body.high-contrast,
+body.high-contrast * {
+  background-color: #ffffff !important;
+  color: #000000 !important;
+  border-color: #000000 !important;
+  box-shadow: none !important;
+}
+
+/* Ссылки и кнопки — с подчёркиванием, чтобы не полагаться на цвет */
+body.high-contrast a,
+body.high-contrast button {
+  text-decoration: underline !important;
+}
+
+/* Делаем рамку у карточек и кнопок видимой */
+body.high-contrast .rounded-xl,
+body.high-contrast .rounded-lg,
+body.high-contrast .rounded-md,
+body.high-contrast .border {
+  border: 1px solid #000000 !important;
+}
+
+/* Специально для цветных заглушек (placeholder'ов) — убираем цвет, оставляем рамку */
+body.high-contrast .bg-blue-100,
+body.high-contrast .bg-green-100,
+body.high-contrast .bg-yellow-100,
+body.high-contrast .bg-purple-100,
+body.high-contrast .bg-pink-100,
+body.high-contrast .bg-indigo-100 {
+  background-color: #ffffff !important;
+  border: 2px solid #000000 !important;
+}
+
+/* Для изображений — убираем фильтры, делаем прозрачнее */
+body.high-contrast img {
+  filter: none !important;
+  opacity: 0.8;
+}
+
+/* Плейсхолдеры в полях ввода — чёрные на белом */
+input::placeholder {
+  color: #9ca3af !important;
+  opacity: 1;
+}
+body.high-contrast input::placeholder {
+  color: #000000 !important;
+}
+body:not(.high-contrast) input::placeholder {
+  color: #9ca3af !important;
+}
+
+/* === УВЕЛИЧЕНИЕ ШРИФТА === */
+body.font-large {
+  font-size: 120% !important;
+}
+
+body.font-xlarge {
+  font-size: 150% !important;
+}
+
+body.font-large *,
+body.font-xlarge * {
+  font-size: inherit !important;
+}
+
+/* === ЗАЩИТА КАРТЫ ОТ РЕЖИМА ВЫСОКОГО КОНТРАСТА === */
+body.high-contrast .pharmacy-map,
+body.high-contrast .pharmacy-map * {
+  filter: none !important;
+  -webkit-filter: none !important;
+  background-color: transparent !important;
+  color: inherit !important;
+  border-color: inherit !important;
+}
