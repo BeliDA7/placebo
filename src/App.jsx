@@ -224,167 +224,21 @@ function App() {
 
 export default App;
 
-// import { useState, useEffect } from 'react';
-// import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
-// //import { list } from './data/list';
-// import Hero from './components/hero';
-// import Basket from './components/Basket';
-// import ProductCard from './components/ProductCard';
-// import PharmacyMap from './pages/PharmacyMap';
-// import HomePage from './pages/HomePage';
-// import ProductPage from './pages/ProductPage';
-// import CookieConsent from './components/CookieConsent';
-// import Terms from './pages/Terms';
-// import CookiesInfo from './pages/CookiesInfo';
-// import AccessibilityPanel from './components/AccessibilityPanel';
-// import CatalogPage from './pages/CatalogPage';
-// import { allProducts } from './data/allProducts';
-// import { AuthProvider, useAuth } from './context/AuthContext';
-// import Register from './pages/Register';
-// import Login from './pages/Login';
-// import { cart as cartApi } from './api';
-// import Account from './pages/Account';
+// App.jsx — корневой компонент всего фронтенд-приложения.
+// Он выполняет роль «мозга», связывающего все компоненты воедино, и управляет глобальным состоянием. Основные функции:
 
-// function AppContent() {
-//   const [basket, setBasket] = useState([]);
-//   const [isBasketOpen, setIsBasketOpen] = useState(false);
-//   const [searchQuery, setSearchQuery] = useState('');
-//   const [searchTrigger, setSearchTrigger] = useState(0);
-//   const [isPanelOpen, setIsPanelOpen] = useState(false);   // для панели доступности
-//   const navigate = useNavigate();
-//   const location = useLocation();
-//   const { user, token, loading } = useAuth();
+// Аутентификация: оборачивает приложение в AuthProvider и использует useAuth для получения пользователя, токена, загрузки профиля.
 
-//   useEffect(() => {
-//     if (user) {
-//       loadCart();
-//     } else {
-//       setBasket([]);
-//     }
-//   }, [user]);
+// Корзина: управляет состоянием корзины (basket), синхронизирует его с сервером через API (cartApi).
+// Предоставляет методы addToBasket, updateBasketItem, removeBasketItem, clearBasket и вычисляет basketCount для бейджа.
 
-//   const loadCart = async () => {
-//     try {
-//       const cartData = await cartApi.get();
-//       setBasket(cartData);
-//     } catch (err) {
-//       console.error('Ошибка загрузки корзины:', err);
-//     }
-//   };
+// Поиск: обрабатывает глобальный поиск (handleGlobalSearch), передаёт searchQuery и searchTrigger в хедер и на соответствующие страницы, перенаправляет на /search.
 
-//   const togglePanel = () => setIsPanelOpen(prev => !prev);
+// Маршрутизация: определяет все маршруты 
+// (/, /product/:id, /pharmacies, /register, /login, /terms, /catalog/:categoryId, /cookies-info, /account, /search, /pharmacies/select)
+// и связывает их с компонентами страниц.
 
-//   const addToBasket = async (product) => {
-//     if (!user) {
-//       alert('Для добавления товаров в корзину необходимо войти');
-//       navigate('/login');
-//       return;
-//     }
-//     try {
-//       await cartApi.add(product);
-//       await loadCart(); // обновляем корзину
-//     } catch (err) {
-//       console.error('Ошибка добавления:', err);
-//     }
-//   };
+// Глобальные UI-элементы: хедер Hero, боковая панель корзины Basket, баннер CookieConsent, панель доступности AccessibilityPanel, нижняя навигация BottomNav.
+// Сброс поиска при возврате на главную, закрытие корзины при переходе на другую страницу, загрузка корзины при входе пользователя.
 
-//   const updateBasketItem = async (productId, quantity) => {
-//     try {
-//       await cartApi.update(productId, quantity);
-//       await loadCart();
-//     } catch (err) {
-//       console.error('Ошибка обновления:', err);
-//     }
-//   };
-
-//   const removeBasketItem = async (productId) => {
-//     try {
-//       await cartApi.remove(productId);
-//       await loadCart();
-//     } catch (err) {
-//       console.error('Ошибка удаления:', err);
-//     }
-//   };
-
-//   const clearBasket = async () => {
-//     try {
-//       await cartApi.clear();
-//       setBasket([]);
-//     } catch (err) {
-//       console.error('Ошибка очистки корзины:', err);
-//     }
-//   };
-
-//   const basketCount = basket.reduce((sum, item) => sum + item.quantity, 0);
-
-//   const handleGlobalSearch = (query) => {
-//     setSearchQuery(query);
-//     setSearchTrigger(prev => prev + 1);
-//   };
-
-//   const filteredProducts = location.pathname === '/'
-//     ? allProducts.filter(product => product.name.toLowerCase().includes(searchQuery.toLowerCase()))
-//     : [];
-
-//   if (loading) {
-//     return <div className="flex justify-center items-center h-screen">Загрузка...</div>;
-//   }
-
-//   return (
-//     <div>
-//       <Hero
-//         onSearchSubmit={handleGlobalSearch}
-//         onBasketClick={() => setIsBasketOpen(true)}
-//         basketCount={basketCount}
-//         onPharmacyClick={() => navigate('/pharmacies')}
-//         onLogoClick={() => navigate('/')}
-//         onCatalogClick={() => navigate('/')}
-//         onTogglePanel={togglePanel}
-//       />
-
-//       <Routes>
-//         <Route path="/" element={<HomePage onAddToBasket={addToBasket} products={filteredProducts} />} />
-//         <Route path="/product/:id" element={<ProductPage onAddToBasket={addToBasket} />} />
-//         <Route path="/pharmacies" element={<PharmacyMap searchQuery={searchQuery} searchTrigger={searchTrigger} />} />
-//         <Route path="/register" element={<Register />} />
-//         <Route path="/login" element={<Login />} />
-//         <Route path="/terms" element={<Terms />} />
-//         <Route path="/catalog/:categoryId" element={<CatalogPage onAddToBasket={addToBasket} />} />
-//         <Route path="/cookies-info" element={<CookiesInfo />} />
-//         <Route path="/account" element={<Account />} />
-//       </Routes>
-
-//       <Basket
-//         basket={basket}
-//         onUpdateQuantity={updateBasketItem}
-//         onRemoveItem={removeBasketItem}
-//         onClear={clearBasket}
-//         onClose={() => setIsBasketOpen(false)}
-//         isOpen={isBasketOpen}
-//       />
-//       <CookieConsent />
-//       <AccessibilityPanel isOpen={isPanelOpen} onClose={() => setIsPanelOpen(false)} />
-//     </div>
-//   );
-// }
-
-// function App() {
-//   return (
-//     <AuthProvider>
-//       <AppContent />
-//     </AuthProvider>
-//   );
-// }
-
-// export const favorites = {
-//   get: () => request('/favorites'),
-//   add: (pharmacyId) =>
-//     request('/favorites/add', {
-//       method: 'POST',
-//       body: JSON.stringify({ pharmacyId }),
-//     }),
-//   remove: (pharmacyId) =>
-//     request(`/favorites/remove/${pharmacyId}`, { method: 'DELETE' }),
-// };
-
-// export default App;
+// В целом App.jsx — это центральный хаб, через который проходят все данные и колбэки, обеспечивающий связность приложения.

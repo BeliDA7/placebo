@@ -1,3 +1,4 @@
+// Импорт компонентов Link и хука useLocation из react-router-dom для навигации и определения текущего пути
 import { Link, useLocation } from 'react-router-dom';
 import {
   IconHome,
@@ -8,8 +9,9 @@ import {
 } from '@tabler/icons-react';
 
 export default function BottomNav({ basketCount, onBasketClick, user }) {
-  const location = useLocation();
-
+  const location = useLocation(); //  Получить текущий объект location, содержащий путь, для подсветки активной ссылки
+  
+  // Массив конфигурации пунктов нижней навигации
   const navItems = [
     { path: '/', icon: IconHome, label: 'Главная' },
     //{ path: '/catalog', icon: IconCategory, label: 'Каталог' },
@@ -24,7 +26,7 @@ export default function BottomNav({ basketCount, onBasketClick, user }) {
         const Icon = item.icon;
         const isActive = location.pathname === item.path;
 
-        // Корзина – модальное окно
+        // Корзина – модальное окно - рендерим как кнопку (вызывает onBasketClick вместо перехода)
         if (item.isBasket) {
           return (
             <button
@@ -62,3 +64,21 @@ export default function BottomNav({ basketCount, onBasketClick, user }) {
     </div>
   );
 }
+
+// Компонент BottomNav представляет собой нижнюю панель навигации мобильного приложения ( адаптивный сайт).
+// Она зайиксированна внизу экрана и содержит четыре основные иконки:
+// Главная (ссылка /)
+// Аптеки (ссылка /pharmacies)
+// Корзина (кнопка, открывающая модальное окно корзины)
+//Профиль (ссылка на /account для авторизованных пользователей или /login для гостей)
+
+// Для каждого пункта, кроме корзины, используется компонент Link из React Router.
+// Корзина реализована как <button>, чтобы вызывать переданный колбэк onBasketClick (открывающий боковую панель корзины, не перезагружая страницу).
+// На кнопке корзины динамически отображается счётчик количества товаров (basketCount), когда он больше нуля.
+// Текущий активный маршрут подсвечивается зелёным цветом (text-green-600). 
+// На узких экранах подписи к иконкам скрываются, на более широких (sm:) становятся видимыми.
+
+// Компонент принимает пропсы:
+// basketCount – количество позиций в корзине,
+// onBasketClick – функция-обработчик клика по корзине,
+// user – объект пользователя (или null), чтобы определить, показывать ли /account или /login.

@@ -1,4 +1,4 @@
-// src/components/CompanyInfo.jsx
+//  Импорт компонентов Link и хук useLocation из react-router-dom для навигации и определения текущего пути
 import { BuildingStorefrontIcon, HeartIcon, ShieldCheckIcon, TruckIcon } from '@heroicons/react/24/outline';
 
 const CompanyInfo = () => {
@@ -51,3 +51,8 @@ const CompanyInfo = () => {
 };
 
 export default CompanyInfo;
+
+// Компонент CompanyInfo отображает промо-секцию с информацией о сети аптек «Плацебо». 
+// Он включает в себя заголовок, краткое описание компании и ключевые преимущества перед конкурентами.
+// Секция свёрстана с использованием Tailwind CSS, адаптивна: на мобильных устройствах преимущества выводятся в одну колонку, на планшетах — в две, на десктопах — в четыре. 
+// Компонент не принимает пропсов, полностью статичен и предназначен для размещения на главной странице.
